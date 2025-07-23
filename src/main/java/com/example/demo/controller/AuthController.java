@@ -21,12 +21,13 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.example.demo.pojo.LoginApiData;
 import com.example.demo.pojo.SignUpApiData;
 import com.example.demo.service.AuthService;
 
@@ -38,6 +39,7 @@ public class AuthController {
 	
 	@Autowired
     public AuthService authService;
+	
 	
 	
 	@PostMapping("/create-account")
@@ -53,5 +55,24 @@ public class AuthController {
     	return ResponseEntity.status(HttpStatus.OK).body(mapData);
 		
 	}
+	/*
+	 get email and password from pojo
+	 create login postmapping url ->receive data of email and password
+	 database query
+	 create a service where it will check password email is present email and password is present
+	 */
+	
+	@PostMapping("/login")
+	public ResponseEntity<Map<String, Object>> postMethodName(@Valid @RequestBody LoginApiData loginApiData) throws Exception {
+		//TODO: process POST request
+		
+		Object bdData = authService.loginService(loginApiData);
+
+		Map<String, Object> userData = new HashMap<String, Object>();
+		userData.put("status", "success");
+		userData.put("Data", bdData);
+		return ResponseEntity.status(HttpStatus.OK).body(userData);
+	}
+	
 
 }
