@@ -32,7 +32,7 @@ public class GlobalException {
 	}
 	
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<Object> handleGenericException(Exception ex){
+	public ResponseEntity<Map<String, String>> handleGenericException(Exception ex){
 
 			Map<String,String> resMap = new HashMap<String, String>();
 			resMap.put("message", ex.getMessage());

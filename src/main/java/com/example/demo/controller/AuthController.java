@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +31,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.pojo.LoginApiData;
 import com.example.demo.pojo.SignUpApiData;
 import com.example.demo.service.AuthService;
+import com.example.demo.service.EmailService;
 
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 
 
@@ -39,6 +42,9 @@ public class AuthController {
 	
 	@Autowired
     public AuthService authService;
+	
+	@Autowired
+	public EmailService emailService;
 	
 	
 	
@@ -72,6 +78,49 @@ public class AuthController {
 		userData.put("status", "success");
 		userData.put("Data", bdData);
 		return ResponseEntity.status(HttpStatus.OK).body(userData);
+	}
+	
+	@GetMapping("/sendplainmail")
+	public ResponseEntity<?> sendPlainMail(){
+		String fromMail = "";
+		String toMailString = "";
+		String subjectString = "";
+		String mailBodyString = "";
+		emailService.sendPlainEmail(fromMail, toMailString, subjectString, mailBodyString);
+		Map<String,String> responseDataMap = new HashMap<String, String>();
+		responseDataMap.put("status", "success");
+		responseDataMap.put("message","Email send");
+		return ResponseEntity.status(HttpStatus.OK).body(responseDataMap);
+	}
+	
+	@GetMapping("/sendhtmlmail")
+	public ResponseEntity<?> sendHtmlMail() throws Exception{
+		String fromMail = "";
+		String toMailString = "";
+		String subjectString = "";
+		String mailBodyString = "";
+		mailBodyString = "hi this is Krishna, </br>"+
+		                 "this is html page mailer</br>"+
+				         "<a href = ''></br>";
+		emailService.sendHtmlEmail(fromMail, toMailString, subjectString,mailBodyString);
+		Map<String,String> responseDataMap = new HashMap<String, String>();
+		responseDataMap.put("status", "success");
+		responseDataMap.put("message","Email send");
+		return ResponseEntity.status(HttpStatus.OK).body(responseDataMap);
+	}
+	
+	@GetMapping("/sendTempmail")
+	public ResponseEntity<?> sendTempMail() throws Exception{
+		String fromMail = ""; //give from mail
+		String toMailString = ""; //give to mail
+		String subjectString = "Test mail from krishna";
+		String mailBodyString = "";
+		
+		emailService.sendTempleteEmail(fromMail, toMailString, subjectString, "test-mail"); //test-mail in resources template
+		Map<String,String> responseDataMap = new HashMap<String, String>();
+		responseDataMap.put("status", "success");
+		responseDataMap.put("message","Email send");
+		return ResponseEntity.status(HttpStatus.OK).body(responseDataMap);
 	}
 	
 
