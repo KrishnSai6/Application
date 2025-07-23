@@ -13,6 +13,7 @@ import java.util.List;
 public interface UserInterface extends JpaRepository<User, Integer> {
 	
 	Optional<User> findByEmail(String email);
+	Optional<User> findByPasswordResetKet(String passwordResetKet);
 
 	
 

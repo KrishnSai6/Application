@@ -32,8 +32,17 @@ public class User {
 	
 	private boolean isActive = true;
 	
+	private String passwordResetKet;
 	
 	
+	public String getPasswordResetKet() {
+		return passwordResetKet;
+	}
+
+	public void setPasswordResetKet(String passwordResetKet) {
+		this.passwordResetKet = passwordResetKet;
+	}
+
 	private LocalDateTime createdOn = LocalDateTime.now();  //this is create in created_on in the database
 
 	public int getId() {

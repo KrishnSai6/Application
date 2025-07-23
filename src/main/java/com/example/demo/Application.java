@@ -10,6 +10,12 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 		
 		System.out.println("In Application");
+		
+		
+		
+			
+		System.out.println((int)(Math.random()*10000));
+		
 	}
 
 }

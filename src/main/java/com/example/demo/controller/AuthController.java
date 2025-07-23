@@ -28,13 +28,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.entity.User;
+import com.example.demo.pojo.ForGotPasswordApi;
 import com.example.demo.pojo.LoginApiData;
+import com.example.demo.pojo.ResetPassword;
 import com.example.demo.pojo.SignUpApiData;
 import com.example.demo.service.AuthService;
 import com.example.demo.service.EmailService;
 
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -122,6 +127,50 @@ public class AuthController {
 		responseDataMap.put("message","Email send");
 		return ResponseEntity.status(HttpStatus.OK).body(responseDataMap);
 	}
+	
+	/*
+	 forgot password Api
+	 create path
+	 receive email and validate it 
+	 check with db if exits send email else throw user not register
+	 
+	 generate key storing in db
+	 receive from ui-> check row based on the key
+	 */
+	
+	
+	@PostMapping("/forgotpassword")
+	public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForGotPasswordApi forGotPasswordApi) throws Exception {
+		
+		authService.forgotPasswordSeervice(forGotPasswordApi);
+		Map<String,String> responseMap = new HashMap<String, String>();
+		responseMap.put("status", "success");
+		responseMap.put("message", "we have sent and email please check you spam folder");
+		
+		return ResponseEntity.status(HttpStatus.OK).body(responseMap);
+	}
+	
+	/*
+	 create path 
+	 receive and validate data -> linkid, password and conform password
+	 check if password and conform password is matching-> if yes proceed else throw error
+	 get user base on linkid -> if exists update password else invalid reset key or expire
+	 */
+	
+	@PostMapping("/resetpassword")
+	public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPassword resetPassword) throws Exception{
+		
+		
+		authService.resetPassword(resetPassword);
+		Map<String,Object> responseMap = new HashMap<String, Object>();
+		responseMap.put("status", "success");
+		responseMap.put("message", "password Changed Successfully");
+	
+		return ResponseEntity.status(HttpStatus.OK).body(responseMap);
+		
+	}
+	
+	
 	
 
 }
